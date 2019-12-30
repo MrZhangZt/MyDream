@@ -58,7 +58,15 @@ public class sensitiveWordsController {
 
     @PostMapping("/imageIdentify")
     public String imageIdentify(@RequestParam("file")MultipartFile file ,@RequestParam("url") String url) throws Exception{
-        String restult ="";
+        TAipVision aipVision =new TAipVision(appId,appKey);
+        String restult =aipVision.visionPornByURL(url);
         return restult;
+    }
+    //暴恐图片识别
+    @PostMapping("/imageTerrorism")
+    public String imageTerrorism(@RequestParam("url") String url) throws Exception{
+        TAipVision aipVision =new TAipVision(appId,appKey);
+        String result =aipVision.imageTerrorismByURL(url);
+        return result;
     }
 }
