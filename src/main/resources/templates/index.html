@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+</head>
+<body>
+    <div>
+        <div>注册</div>
+            <span>设备号</span> <input id="DeviceID" type="text" name="fname" /><br />
+            <input name='sub'  id='1' onclick='test()' type="button" value="确认提交"/>
+            <input name='sub'  id='zhuxiao' onclick='zhuxiao()' type="button" value="注销"/>
+    </div>
+    <div>
+        <div>图片上传</div>
+        <input type="file" id="file" multiple/>
+        <img src="" style="display: none"/>
+        <button id="upload" onclick="upload()" type="button">提交</button>
+    </div>
+<script type="text/javascript">
+
+        function test(){
+            var deviceID=$("#DeviceID").val();
+            var newDate={
+                    "deviceID":deviceID
+            };
+            console.log(newDate);
+            $.ajax({
+                type:"POST",
+                url:"/souImage",
+                async:true,
+                contentType: "application/json;charset=UTF-8",
+                dataType:"json",
+                data:JSON.stringify(newDate),
+                success:function(data){
+                    console.log(data);
+                },error:function(data){
+                    console.log(data);
+                }
+            });
+        }
+        function zhuxiao(){
+            var deviceID=$("#DeviceID").val();
+            var newDate={
+                    "deviceID":deviceID
+            };
+            console.log(newDate);
+            $.ajax({
+                type:"POST",
+                url:"/UnRegister",
+                contentType: "application/json;charset=UTF-8",
+                dataType:"json",
+                data:JSON.stringify(newDate),
+                success:function(data){
+                    console.log(data);
+                },error:function(data){
+                    console.log(data);
+                }
+            });
+        }
+        var length;
+        $("#file").change(function (){
+           length=this.files.length;
+        });
+        function upload(){
+            var formData = new FormData();
+            var arr=new Array();
+            var container;
+            var i=0;
+            for(var i=0;i<length;i++){
+                formData.append('file', $('#file')[0].files[i]);
+                console.log(formData.get("file"));
+            }
+            container=formData.getAll("file");
+            for (var item in container) {
+                arr[i] = container[item];
+                i++;
+            }
+            console.log(arr);
+            $.ajax({
+                url: '/test',
+                type: 'POST',
+                dataType:"json",
+                cache: false,
+                data: formData,
+                processData: false,
+                contentType: false,
+                success:(function(data) {
+                    window.confirm(data.code)
+                }),
+                error:(function(res) {
+                    alert("失败");
+                })
+            });
+
+        }
+
+</script>
+</body>
+</html>
